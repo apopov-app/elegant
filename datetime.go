@@ -5,6 +5,9 @@ import "time"
 // TimeDate works like standard time.Date, but support skip any part if passed -1 (nil for Location)
 func TimeDate(year int, month time.Month, day, hour, min, sec, nsec int, loc *time.Location) time.Time {
 	now := time.Now()
+	if loc != nil {
+		now = now.In(loc)
+	}
 
 	if year == -1 {
 		year = now.Year()

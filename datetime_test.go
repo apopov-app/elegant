@@ -5,6 +5,14 @@ import (
 	"time"
 )
 
+func TestMakeCurrentDateUTC(t *testing.T) {
+	resultTime := TimeDate(-1, -1, -1, 12, 42, 12, 134, time.UTC)
+	now := time.Now().In(time.UTC)
+
+	checkDate(t, resultTime, now.Year(), now.Month(), now.Day())
+	checkTime(t, resultTime, 12, 42, 12)
+}
+
 func TestMakeCurrentDate(t *testing.T) {
 	resultTime := TimeDate(-1, -1, -1, 12, 42, 12, 134, nil)
 	now := time.Now()
