@@ -5,10 +5,15 @@ import (
 	"time"
 )
 
-func TestMakeCurrentDateUTC(t *testing.T) {
+func TestMain(m *testing.M) {
 	now := time.Now()
 	timeNow = func() time.Time { return now }
 
+	m.Run()
+}
+
+func TestMakeCurrentDateUTC(t *testing.T) {
+	now := timeNow().In(time.UTC)
 	resultTime := TimeDate(-1, -1, -1, 12, 42, 12, 134, time.UTC)
 
 	checkDate(t, resultTime, now.Year(), now.Month(), now.Day())
@@ -16,9 +21,7 @@ func TestMakeCurrentDateUTC(t *testing.T) {
 }
 
 func TestMakeCurrentDate(t *testing.T) {
-	now := time.Now()
-	timeNow = func() time.Time { return now }
-
+	now := timeNow()
 	resultTime := TimeDate(-1, -1, -1, 12, 42, 12, 134, nil)
 
 	checkDate(t, resultTime, now.Year(), now.Month(), now.Day())
@@ -26,9 +29,7 @@ func TestMakeCurrentDate(t *testing.T) {
 }
 
 func TestMakeAnotherDate(t *testing.T) {
-	now := time.Now()
-	timeNow = func() time.Time { return now }
-
+	now := timeNow()
 	resultTime := TimeDate(1872, 3, 23, -1, -1, -1, -1, nil)
 
 	checkDate(t, resultTime, 1872, 3, 23)
@@ -67,6 +68,6 @@ func checkTime(t *testing.T, date time.Time, hour, minute, second, nanosecond in
 	}
 
 	if date.Nanosecond() != nanosecond {
-		t.Errorf("Nanosecond does not match. Want %d Have %d", date.Second(), second)
+		t.Errorf("Nanosecond does not match. Want %d Have %d", date.Nanosecond(), nanosecond)
 	}
 }
